@@ -51,6 +51,14 @@ public class PictureTester
     swan.explore();
   }
   
+  public static void testMirrorVertRightToLeft()
+  {
+      Picture beach = new Picture("beach.jpg");
+      beach.mirrorVerticalRightToLeft();
+      beach.explore();
+  }
+  
+  
   /** Main method for testing.  Every class can have a main
     * method in Java */
   public static void main(String[] args)

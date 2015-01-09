@@ -225,24 +225,41 @@ public class Picture extends SimplePicture
     int width = pixels[0].length;
     for (int row = 0; row < pixels.length; row++)
     {
-      for (int col = width/2 ; col > width / 2; col++)
+      for (int col = 0 ; col < width / 2; col++)
       {
-        leftPixel = pixels[row][col];
-        rightPixel = pixels[row][width - 1 - col];
+        leftPixel = pixels[row][width - 1 - col];
+        rightPixel = pixels[row][col];
         rightPixel.setColor(leftPixel.getColor());
       }
     } 
   }
     
-  
+  public void mirrorHorizontal()
+  {
+    Pixel[][] pixels = this.getPixels2D();
+    Pixel topPixel = null;
+    Pixel bottomPixel = null;
+    int height = pixels.length;
+    for (int row = 0; row < height / 2; row++)
+    {
+      for (int col = 0 ; col < pixels[0].length; col++)
+      {
+        topPixel = pixels[row][col];
+        bottomPixel = pixels[height - 1 - row][col];
+        bottomPixel.setColor(topPixel.getColor());
+      }
+    } 
+  }
   /* Main method for testing - each class in Java can have a main 
    * method 
    */
   public static void main(String[] args) 
   {
     Picture beach = new Picture("beach.jpg");
-    beach.explore();
-    beach.mirrorVerticalRightToLeft();
+    //beach.explore();
+    //beach.mirrorVertical();
+    //beach.explore();
+    beach.mirrorHorizontal();
     beach.explore();
   }
   
