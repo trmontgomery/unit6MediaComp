@@ -58,6 +58,12 @@ public class PictureTester
       beach.explore();
   }
   
+  public static void testMirrorDiagonal()
+  {
+      Picture snowman = new Picture("snowman.jpg");
+      snowman.mirrorDiagonal();
+      snowman.explore();
+    }
   
   /** Main method for testing.  Every class can have a main
     * method in Java */

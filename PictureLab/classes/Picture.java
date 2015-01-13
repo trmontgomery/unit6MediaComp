@@ -250,17 +250,73 @@ public class Picture extends SimplePicture
       }
     } 
   }
-  /* Main method for testing - each class in Java can have a main 
-   * method 
-   */
+  
+  public void mirrorHorizontalBotToTop()
+  {
+    Pixel[][] pixels = this.getPixels2D();
+    Pixel topPixel = null;
+    Pixel bottomPixel = null;
+    int height = pixels.length;
+    for (int row = 0; row < height / 2; row++)
+    {
+      for (int col = 0 ; col < pixels[0].length; col++)
+      {
+        topPixel = pixels[height - 1 - row][col];
+        bottomPixel = pixels[row][col];
+        bottomPixel.setColor(topPixel.getColor());
+      }
+    } 
+    }
+    
+  public void mirrorDiagonal()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      Pixel topTriangle = null;
+      Pixel botTriangle = null;
+      int height = pixels.length;
+      
+      for (int row = 0; row < height; row++)
+      {
+          for (int col = 0; col < pixels.length; col++)
+          {
+              topTriangle = pixels[row][col];
+              botTriangle = pixels[col][row];
+              topTriangle.setColor(botTriangle.getColor());
+            }
+        }
+    }
+    
+  public void mirrorArms()
+  {
+      int mirrorPoint = 296;
+      Pixel leftPixel = null;
+      Pixel rightPixel = null;
+      int count = 0;
+      Pixel[][] pixels = this.getPixels2D();
+
+      // loop through the rows
+      for (int row = 155; row < 204; row++)
+      {
+        // loop from 13 to just before the mirror point
+        for (int col = 13; col < mirrorPoint; col++)
+        {
+            leftPixel = pixels[row][col];
+            rightPixel = pixels[row][mirrorPoint - col + mirrorPoint];
+            rightPixel.setColor(leftPixel.getColor());
+        }
+      }
+           
+  }
+   /* Main method for testing - each class in Java can have a main 
+    * method 
+    */
   public static void main(String[] args) 
   {
-    Picture beach = new Picture("beach.jpg");
-    //beach.explore();
-    //beach.mirrorVertical();
-    //beach.explore();
-    beach.mirrorHorizontal();
-    beach.explore();
+    Picture snow = new Picture("snowman.jpg");
+    snow.mirrorArms();
+    snow.explore();
+   
+    
   }
   
 } // this } is the end of class Picture, put all new methods before this

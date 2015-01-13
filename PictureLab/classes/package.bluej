@@ -145,6 +145,7 @@ target5.editor.x=0
 target5.editor.y=0
 target5.height=50
 target5.name=PictureTester
+target5.naviview.expanded=true
 target5.showInterface=false
 target5.type=ClassTarget
 target5.typeParameters=
