@@ -288,35 +288,110 @@ public class Picture extends SimplePicture
     
   public void mirrorArms()
   {
-      int mirrorPoint = 296;
-      Pixel leftPixel = null;
-      Pixel rightPixel = null;
+      int mirrorPoint = 245;
+      Pixel topPixel = null;
+      Pixel botPixel = null;
       int count = 0;
       Pixel[][] pixels = this.getPixels2D();
 
       // loop through the rows
-      for (int row = 155; row < 204; row++)
+      for (int row = 158; row < mirrorPoint; row++)
       {
         // loop from 13 to just before the mirror point
-        for (int col = 13; col < mirrorPoint; col++)
+        for (int col = 103; col < 173; col++)
         {
-            leftPixel = pixels[row][col];
-            rightPixel = pixels[row][mirrorPoint - col + mirrorPoint];
-            rightPixel.setColor(leftPixel.getColor());
+            topPixel = pixels[row][col];
+            botPixel = pixels[mirrorPoint - row + mirrorPoint][col];
+            botPixel.setColor(topPixel.getColor());
         }
       }
            
+  }
+  
+  public void keepOnlyBlue()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      
+      for (Pixel[] rowArray : pixels)
+      {
+          for (Pixel pixelObj : rowArray)
+          {
+              pixelObj.setRed(0);
+              pixelObj.setGreen(0);
+          }
+      }
+  }
+  
+  public void negate()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      
+      for (Pixel[] rowArray : pixels)
+      {
+          for (Pixel pixelObj : rowArray)
+          {
+              pixelObj.setRed(255 - pixelObj.getRed());
+              pixelObj.setGreen(255 - pixelObj.getGreen());
+              pixelObj.setBlue(255 - pixelObj.getBlue());
+          }
+      }
+    }
+    
+  public void grayscale()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      
+      for (Pixel[] rowArray : pixels)
+      {
+          for (Pixel pixelObj : rowArray)
+          {
+              int avg = 0;
+              int red = pixelObj.getRed();
+              int blue = pixelObj.getBlue();
+              int green = pixelObj.getGreen();
+              avg = (red + blue + green) / 3;
+              pixelObj.setRed(avg);
+              pixelObj.setRed(avg);
+              pixelObj.setRed(avg);
+          }
+      }
+    } 
+    
+  public void fixUnderWater()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      
+      for (Pixel[] rowArray : pixels)
+      {
+          for (Pixel pixelObj : rowArray)
+          {
+              pixelObj.setBlue(0);
+          }
+      }
+    }   
+    
+  void cropAndCopy(Picture sourcePicture, int startSourceRow, int endSourceRow, 
+    int startSourceCol, int endSourceCol, int startDestRow, int startDestCol )
+  {
+             
+  }
+  
+  void scaleByHalf(Picture sourcePicture)
+  {
+      
   }
    /* Main method for testing - each class in Java can have a main 
     * method 
     */
   public static void main(String[] args) 
   {
-    Picture snow = new Picture("snowman.jpg");
-    snow.mirrorArms();
-    snow.explore();
-   
+    //Picture snow2 = new Picture("beach.jpg");
+    // snow2.grayscale();
+    // snow2.explore();
     
+    Picture water = new Picture("water.jpg");
+    water.fixUnderWater();
+    water.explore();
   }
   
 } // this } is the end of class Picture, put all new methods before this
