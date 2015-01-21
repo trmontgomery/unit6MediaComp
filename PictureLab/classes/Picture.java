@@ -373,7 +373,33 @@ public class Picture extends SimplePicture
   void cropAndCopy(Picture sourcePicture, int startSourceRow, int endSourceRow, 
     int startSourceCol, int endSourceCol, int startDestRow, int startDestCol )
   {
-             
+     Pixel [][] pixels = sourcePicture.getPixels2D();
+     Pixel [][] copy = new Pixel[endSourceRow - startSourceRow][endSourceCol - startSourceCol];
+     
+     int copyRow = 0;
+     int copyCol = 0;
+     for (int row = startSourceRow; row < endSourceRow; row++)
+     {
+         for (int col = startSourceCol; col < endSourceCol; col++)
+         {
+             copy[copyRow][copyCol].setColor(pixels[row][col].getColor());
+             copyRow++;
+             copyCol++;
+         }
+     }
+     
+     Pixel [][] blank = this.getPixels2D();
+     int blankRow = 0;
+     int blankCol = 0;
+     for (int row = startDestRow; row < (copyRow + startDestRow); row++)
+     {
+         for (int col = startDestCol; col < (copyCol + startDestCol); col++)
+         {
+             blank[row][col].setColor(copy[blankRow][blankCol].getColor());
+             blankRow++;
+             blankCol++;
+            }
+        }
   }
   
   void scaleByHalf(Picture sourcePicture)
@@ -385,13 +411,11 @@ public class Picture extends SimplePicture
     */
   public static void main(String[] args) 
   {
-    //Picture snow2 = new Picture("beach.jpg");
-    // snow2.grayscale();
-    // snow2.explore();
     
-    Picture water = new Picture("water.jpg");
-    water.fixUnderWater();
-    water.explore();
+    Picture beach = new Picture("beach.jpg");
+    Picture blank = new Picture("640x480.jpg");
+    blank.cropAndCopy(beach, 0,20,0,20, 30, 40);
+    blank.explore();
   }
   
 } // this } is the end of class Picture, put all new methods before this
