@@ -308,6 +308,25 @@ public class Picture extends SimplePicture
            
   }
   
+  public void mirrorGull()
+  {
+      int mirrorPoint = 350;
+      Pixel leftPixel = null;
+      Pixel rightPixel = null;
+      int count = 0;
+      Pixel [][] pixels = this.getPixels2D();
+      
+      for (int row = 232; row < 325; row++)
+      {
+          for (int col = 230; col < mirrorPoint; col++)
+          {
+              leftPixel = pixels[row][col];
+              rightPixel = pixels[row][mirrorPoint - col + mirrorPoint];
+              rightPixel.setColor(leftPixel.getColor());
+            }
+        }
+    }
+  
   public void keepOnlyBlue()
   {
       Pixel[][] pixels = this.getPixels2D();
@@ -318,6 +337,34 @@ public class Picture extends SimplePicture
           {
               pixelObj.setRed(0);
               pixelObj.setGreen(0);
+          }
+      }
+  }
+  
+  public void keepOnlyRed()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      
+      for (Pixel[] rowArray : pixels)
+      {
+          for (Pixel pixelObj : rowArray)
+          {
+              pixelObj.setBlue(0);
+              pixelObj.setGreen(0);
+          }
+      }
+  }
+  
+  public void keepOnlyGreen()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      
+      for (Pixel[] rowArray : pixels)
+      {
+          for (Pixel pixelObj : rowArray)
+          {
+              pixelObj.setRed(0);
+              pixelObj.setBlue(0);
           }
       }
   }
@@ -369,53 +416,140 @@ public class Picture extends SimplePicture
           }
       }
     }   
-    
-  void cropAndCopy(Picture sourcePicture, int startSourceRow, int endSourceRow, 
-    int startSourceCol, int endSourceCol, int startDestRow, int startDestCol )
+   
+  
+  public void cropAndCopy(Picture fromPic, int startRow, int endRow,
+  int startCol, int endCol, 
+  int startDesRow, int startDesCol)
   {
-     Pixel [][] pixels = sourcePicture.getPixels2D();
-     Pixel [][] copy = new Pixel[endSourceRow - startSourceRow][endSourceCol - startSourceCol];
-     
-     int copyRow = 0;
-     int copyCol = 0;
-     for (int row = startSourceRow; row < endSourceRow; row++)
-     {
-         for (int col = startSourceCol; col < endSourceCol; col++)
-         {
-             copy[copyRow][copyCol].setColor(pixels[row][col].getColor());
-             copyRow++;
-             copyCol++;
-         }
-     }
-     
-     Pixel [][] blank = this.getPixels2D();
-     int blankRow = 0;
-     int blankCol = 0;
-     for (int row = startDestRow; row < (copyRow + startDestRow); row++)
-     {
-         for (int col = startDestCol; col < (copyCol + startDestCol); col++)
-         {
-             blank[row][col].setColor(copy[blankRow][blankCol].getColor());
-             blankRow++;
-             blankCol++;
-            }
-        }
+    Pixel fromPixel = null;
+    Pixel toPixel = null;
+    Pixel[][] toPixels = this.getPixels2D();
+    Pixel[][] fromPixels = fromPic.getPixels2D();
+    for (int fromRow = startRow, toRow = startDesRow; 
+         fromRow < endRow &&
+         toRow < (startDesRow + (endRow-startRow) ); 
+         fromRow++, toRow++)
+    {
+      for (int fromCol = startCol, toCol = startDesCol; 
+           fromCol < endCol &&
+           toCol < (startDesCol + (endCol-startCol) );  
+           fromCol++, toCol++)
+      {
+        fromPixel = fromPixels[fromRow][fromCol];
+        toPixel = toPixels[toRow][toCol];
+        toPixel.setColor(fromPixel.getColor());
+      }
+    }   
   }
   
-  void scaleByHalf(Picture sourcePicture)
+  public Picture scaleByHalf()
   {
+      Pixel[][] source = this.getPixels2D();
+      int halfWidth = source.length / 2;
+      int halfHeight = source[0].length / 2;
+      Picture halfSize = new Picture(halfWidth, halfHeight);
+      Pixel[][] half = halfSize.getPixels2D();
+      Pixel sourcePixel = null;
+      Pixel halfPixel = null;
       
+      for (int row = 0, halfRow = 0; 
+           row < source.length && halfRow < half.length; 
+           row = row + 2, halfRow++)
+      {
+          for (int col = 0, halfCol = 0; 
+               col < source[0].length && halfCol < half[0].length;
+               col = col + 2, halfCol++)
+          {
+              sourcePixel = source[row][col];
+              halfPixel = half[halfRow][halfCol];
+              halfPixel.setColor(sourcePixel.getColor());
+            }
+        }
+        
+      return halfSize;  
   }
+  
+  public Picture scaleBy(int scaleFactor)
+  {
+      Pixel[][] source = this.getPixels2D();
+      int scaledWidth = source.length / scaleFactor;
+      int scaledHeight = source[0].length / scaleFactor;
+      Picture reSize = new Picture(scaledWidth, scaledHeight);
+      Pixel[][] scaled = reSize.getPixels2D();
+      Pixel sourcePixel = null;
+      Pixel scalePixel = null;
+      
+      for (int row = 0, scaledRow = 0; 
+           row < source.length && scaledRow < scaled.length; 
+           row = row + scaleFactor, scaledRow++)
+      {
+          for (int col = 0, scaledCol = 0; 
+               col < source[0].length && scaledCol < scaled[0].length;
+               col = col + scaleFactor, scaledCol++)
+          {
+              sourcePixel = source[row][col];
+              scalePixel = scaled[scaledRow][scaledCol];
+              scalePixel.setColor(sourcePixel.getColor());
+            }
+        }
+        
+      return reSize;  
+  }
+ 
+  
+  public static void myCollage()
+  {
+      //initialize pictures and store them in an array
+      
+      Picture a = new Picture("final.jpg");
+      a.negate();
+     
+      Picture b = new Picture("final.jpg");
+      b.zeroBlue();
+      
+      Picture c = new Picture("final.jpg");
+      c.keepOnlyBlue();
+      
+      Picture d = new Picture("final.jpg");
+      d.keepOnlyRed();
+      
+      Picture e = new Picture("final.jpg");
+      e.keepOnlyGreen();
+      
+      Picture f = new Picture("final.jpg");
+      f.mirrorHorizontal();
+      
+      Picture g = new Picture("final.jpg");
+      g.mirrorHorizontalBotToTop();
+      
+      Picture h = new Picture("final.jpg");
+      h.mirrorVertical();
+      
+      Picture[] pictures = {a,h,d,b};
+      Picture[] pictures1 = {g,e,f,c};
+      
+      //scale all pictures to 1/3 size and then add them to collage
+      int canvasWidth = 900;
+      int canvasHeight = 600 ;
+      Picture blankCanvas = new Picture(1000, 1000);
+      Picture x = a.scaleBy(3);
+      blankCanvas.cropAndCopy(x, 0, 219 , 0, 283 ,0, 219);
+          
+      blankCanvas.explore();
+    }
    /* Main method for testing - each class in Java can have a main 
     * method 
     */
   public static void main(String[] args) 
   {
     
-    Picture beach = new Picture("beach.jpg");
-    Picture blank = new Picture("640x480.jpg");
-    blank.cropAndCopy(beach, 0,20,0,20, 30, 40);
-    blank.explore();
+    Picture b = new Picture("final.jpg");
+      b.zeroBlue();
+      Picture x = b.scaleBy(3);
+      x.explore();
+      b.explore();
+      
   }
   
 } // this } is the end of class Picture, put all new methods before this
