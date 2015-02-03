@@ -526,17 +526,30 @@ public class Picture extends SimplePicture
       Picture h = new Picture("final.jpg");
       h.mirrorVertical();
       
-      Picture[] pictures = {a,h,d,b};
-      Picture[] pictures1 = {g,e,f,c};
+      Picture[][] pictures = {
+                                {a,h,d,b},
+                                {g,e,f,c}
+                            };
       
       //scale all pictures to 1/3 size and then add them to collage
-      int canvasWidth = 900;
-      int canvasHeight = 600 ;
-      Picture blankCanvas = new Picture(1000, 1000);
-      Picture x = a.scaleBy(3);
-      blankCanvas.cropAndCopy(x, 0, 219 , 0, 283 ,0, 219);
+      int canvasWidth = (a.getWidth()/3)*4;
+      int canvasHeight = (a.getHeight()/3)*2 ;
+      Picture blankCanvas = new Picture(canvasHeight, canvasWidth);
+      for (int row = 0; row < pictures.length; row++)
+      {
+          for (int col = 0; col < pictures[0].length; col++)
+          {
+              Picture x = pictures[row][col].scaleBy(3);
+              int height = x.getHeight();
+              int width = x.getWidth();
+              blankCanvas.cropAndCopy(x,0,height,0,width,
+                                0 + (row*height) ,0 + (col*width));
+            }
+        }
+      
           
       blankCanvas.explore();
+      blankCanvas.write("MyCollage.jpg");
     }
    /* Main method for testing - each class in Java can have a main 
     * method 
