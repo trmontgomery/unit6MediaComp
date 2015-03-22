@@ -557,11 +557,13 @@ public class Picture extends SimplePicture
   public static void main(String[] args) 
   {
     
-    Picture b = new Picture("final.jpg");
-      b.zeroBlue();
-      Picture x = b.scaleBy(3);
-      x.explore();
-      b.explore();
+    Picture b = new Picture("face.jpg");
+    b.explore();
+    b.mirrorVerticalRightToLeft();
+    b.explore();
+    Picture c = new Picture("face.jpg");
+    c.mirrorVertical();
+    c.explore();
       
   }
   
